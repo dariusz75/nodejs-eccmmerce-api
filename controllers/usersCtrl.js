@@ -1,6 +1,7 @@
-import bcrypt from 'bcryptjs';
-
 import User from '../models/User.js';
+
+import bcrypt from 'bcryptjs';
+import asyncHandler from 'express-async-handler';
 
 // #####################################
 // @desc    Register User
@@ -8,14 +9,12 @@ import User from '../models/User.js';
 // @access  Private/Admin
 // #####################################
 
-export const registerUserCtrl = async (req, res) => {
+export const registerUserCtrl = asyncHandler(async (req, res) => {
 	const { fullname, email, password } = req.body;
 	// check if user exists
 	const userExists = await User.findOne({ email });
 	if (userExists) {
-		return res.json({
-			msg: 'User already exists',
-		});
+		throw new Error('User already exists');
 	}
 
 	// hash user password
@@ -34,7 +33,7 @@ export const registerUserCtrl = async (req, res) => {
 		message: 'User registered successfully',
 		data: user,
 	});
-};
+});
 
 // #####################################
 // @desc    Login User
@@ -42,7 +41,7 @@ export const registerUserCtrl = async (req, res) => {
 // @access  Public
 // #####################################
 
-export const loginUserCtrl = async (req, res) => {
+export const loginUserCtrl = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
 
 	// find a user in database
@@ -60,8 +59,6 @@ export const loginUserCtrl = async (req, res) => {
 			userFound,
 		});
 	} else {
-		res.json({
-			msg: 'Invalid login details',
-		});
+		throw new Error('Invalid login details');
 	}
-};
+});
