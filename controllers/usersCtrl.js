@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs';
+
 import User from '../models/User.js';
 
 // @desc    Register user
@@ -13,11 +15,16 @@ export const registerUserCtrl = async (req, res) => {
 			msg: 'User already exists',
 		});
 	}
+
+	// hash user password
+	const salt = await bcrypt.genSalt(10);
+	const hashedPassword = await bcrypt.hash(password, salt);
+
 	// create user
 	const user = await User.create({
 		fullname,
 		email,
-		password,
+		password: hashedPassword,
 	});
 
 	res.status(201).json({
