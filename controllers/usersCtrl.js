@@ -3,6 +3,7 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
+import getTokenFromHeader from '../utils/getTokenFromHeader.js';
 
 // #####################################
 // @desc    Register User
@@ -68,6 +69,8 @@ export const loginUserCtrl = asyncHandler(async (req, res) => {
 // @access  Private
 
 export const getUserProfileCtrl = asyncHandler(async (req, res) => {
+	const token = getTokenFromHeader(req);
+	console.log(token);
 	res.json({
 		msg: 'Welcome to Profile Page',
 	});
