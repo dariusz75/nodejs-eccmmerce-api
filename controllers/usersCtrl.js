@@ -36,11 +36,9 @@ export const registerUserCtrl = asyncHandler(async (req, res) => {
 	});
 });
 
-// #####################################
 // @desc    Login User
 // @route   POST /api/v1/users/login
 // @access  Public
-// #####################################
 
 export const loginUserCtrl = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
@@ -63,4 +61,14 @@ export const loginUserCtrl = asyncHandler(async (req, res) => {
 	} else {
 		throw new Error('Invalid login details');
 	}
+});
+
+// @desc    Login User
+// @route   POST /api/v1/users/profile
+// @access  Private
+
+export const getUserProfileCtrl = asyncHandler(async (req, res) => {
+	res.json({
+		msg: 'Welcome to Profile Page',
+	});
 });
