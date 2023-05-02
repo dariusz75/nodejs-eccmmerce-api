@@ -4,13 +4,11 @@ import bcrypt from 'bcryptjs';
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import getTokenFromHeader from '../utils/getTokenFromHeader.js';
+import verifyToken from '../utils/verifyToken.js';
 
-// #####################################
 // @desc    Register User
 // @route   POST /api/v1/users/register
 // @access  Private/Admin
-// #####################################
-
 export const registerUserCtrl = asyncHandler(async (req, res) => {
 	const { fullname, email, password } = req.body;
 	// check if user exists
@@ -40,7 +38,6 @@ export const registerUserCtrl = asyncHandler(async (req, res) => {
 // @desc    Login User
 // @route   POST /api/v1/users/login
 // @access  Public
-
 export const loginUserCtrl = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
 
@@ -64,12 +61,14 @@ export const loginUserCtrl = asyncHandler(async (req, res) => {
 	}
 });
 
-// @desc    Login User
+// @desc    Get User profile
 // @route   POST /api/v1/users/profile
 // @access  Private
-
 export const getUserProfileCtrl = asyncHandler(async (req, res) => {
 	const token = getTokenFromHeader(req);
+	const verified = verifyToken(token);
+	console.log('veryfied token is', verified);
+
 	console.log(token);
 	res.json({
 		msg: 'Welcome to Profile Page',
