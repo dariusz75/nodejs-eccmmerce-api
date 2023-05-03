@@ -3,6 +3,7 @@ dotenv.config();
 import express from 'express';
 import dbConnect from '../config/dbConnect.js';
 import userRoutes from '../routes/usersRoute.js';
+import productsRoute from '../routes/productsRoute.js';
 import {
 	globalErrorHandler,
 	notFound,
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // routes
 app.use('/api/v1/users/', userRoutes);
+app.use('/api/v1/products/', productsRoute);
 
 // error middleware
 app.use(notFound);
