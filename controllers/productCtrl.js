@@ -51,12 +51,58 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 	let productQuery = Product.find();
 
+	// filter products by name
 	if (req.query.name) {
 		productQuery = productQuery.find({
 			name: {
 				$regex: req.query.name,
 				$options: 'i',
 			},
+		});
+	}
+	// filter products by brand
+	if (req.query.brand) {
+		productQuery = productQuery.find({
+			brand: {
+				$regex: req.query.brand,
+				$options: 'i',
+			},
+		});
+	}
+	// filter products by category
+	if (req.query.category) {
+		productQuery = productQuery.find({
+			category: {
+				$regex: req.query.category,
+				$options: 'i',
+			},
+		});
+	}
+	// filter products by color
+	if (req.query.colors) {
+		productQuery = productQuery.find({
+			colors: {
+				$regex: req.query.colors,
+				$options: 'i',
+			},
+		});
+	}
+	// filter products by color
+	if (req.query.size) {
+		productQuery = productQuery.find({
+			sizes: {
+				$regex: req.query.size,
+				$options: 'i',
+			},
+		});
+	}
+	// filter products by price range
+	if (req.query.price) {
+		const priceRange = req.query.price.split('-');
+		// gte: greater than or equal to
+		// lte: smaller than or equal to
+		productQuery = productQuery.find({
+			price: { $gte: priceRange[0], $lte: priceRange[1] },
 		});
 	}
 
