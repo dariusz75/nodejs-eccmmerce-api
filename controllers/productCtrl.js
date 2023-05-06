@@ -144,3 +144,20 @@ export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 		message: 'Products fetched successfully',
 	});
 });
+
+// @desc    Get single product
+// @route   POST /api/v1/products
+// @access  Public
+
+export const getSingleProductCtrl = expressAsyncHandler(async (req, res) => {
+	const product = await Product.findById(req.params.id);
+	if (!product) {
+		throw new Error('Product not found');
+	} else {
+		res.json({
+			status: 'success',
+			message: 'Product fetched successfully',
+			product,
+		});
+	}
+});
