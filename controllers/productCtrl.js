@@ -105,11 +105,42 @@ export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 			price: { $gte: priceRange[0], $lte: priceRange[1] },
 		});
 	}
+	//pagination
+	// page
+	const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
+	// limit
+	const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
+	// start Index
+	const startIndex = (page - 1) * limit;
+	// end Index
+	const endIndex = page * limit;
+	// total products
+	const total = await Product.countDocuments();
+	productQuery = productQuery.skip(startIndex).limit(limit);
+	// pagination results
+	let pagination = {};
+	if (endIndex < total) {
+		pagination.next = {
+			page: page + 1,
+			limit,
+		};
+	}
+	if (startIndex > 0) {
+		pagination.prev = {
+			page: page - 1,
+			limit,
+		};
+	}
 
+	// awaiting the query
 	const products = await productQuery;
 
 	res.json({
 		status: 'success',
 		products,
+		results: products.length,
+		pagination,
+		total,
+		message: 'Products fetched successfully',
 	});
 });
