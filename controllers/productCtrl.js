@@ -201,3 +201,16 @@ export const updateProductCtrl = expressAsyncHandler(async (req, res) => {
 		product,
 	});
 });
+
+// @desc    Update product
+// @route   POST /api/v1/products/:id/update
+// @access  Private/Admin
+export const deleteProductCtrl = expressAsyncHandler(async (req, res) => {
+	// update
+	const product = await Product.findByIdAndDelete(req.params.id);
+
+	res.json({
+		status: 'success',
+		message: 'Product deleted successfully',
+	});
+});
