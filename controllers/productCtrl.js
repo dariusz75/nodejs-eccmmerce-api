@@ -47,7 +47,6 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 // @desc    Get all products
 // @route   POST /api/v1/products
 // @access  Public
-
 export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 	let productQuery = Product.find();
 
@@ -146,9 +145,8 @@ export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Get single product
-// @route   POST /api/v1/products
+// @route   POST /api/v1/products/:id
 // @access  Public
-
 export const getSingleProductCtrl = expressAsyncHandler(async (req, res) => {
 	const product = await Product.findById(req.params.id);
 	if (!product) {
@@ -160,4 +158,46 @@ export const getSingleProductCtrl = expressAsyncHandler(async (req, res) => {
 			product,
 		});
 	}
+});
+
+// @desc    Update product
+// @route   POST /api/v1/products/:id/update
+// @access  Private/Admin
+export const updateProductCtrl = expressAsyncHandler(async (req, res) => {
+	const {
+		name,
+		description,
+		category,
+		sizes,
+		colors,
+		user,
+		images,
+		price,
+		totalQty,
+		brand,
+	} = req.body;
+	// update
+	const product = await Product.findByIdAndUpdate(
+		req.params.id,
+		{
+			name,
+			description,
+			category,
+			sizes,
+			colors,
+			user,
+			images,
+			price,
+			totalQty,
+		},
+		{
+			new: true,
+		}
+	);
+
+	res.json({
+		status: 'success',
+		message: 'Product updated successfully',
+		product,
+	});
 });
