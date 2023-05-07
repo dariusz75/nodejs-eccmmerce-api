@@ -28,22 +28,29 @@ export const createCategoryCtrl = expressAsyncHandler(async (req, res) => {
 // @desc    Get all categories
 // @route   POST /api/v1/categories
 // @access  Public
-export const getCategoryCtrl = expressAsyncHandler(async (req, res) => {
-	let categoryQuery = Category.find();
+export const getAllCategoriesCtrl = expressAsyncHandler(async (req, res) => {
+	let categories = await Category.find();
 
-	// filter category by name
-	if (req.query.name) {
-		productQuery = productQuery.find({
-			name: {
-				$regex: req.query.name,
-				$options: 'i',
-			},
-		});
-	}
-	// Push the product into category
 	res.json({
 		status: 'success',
-		message: 'Category created successfully',
-		category,
+		message: 'Categories fetched successfully',
+		categories,
 	});
+});
+
+// @desc    Get all categories
+// @route   POST /api/v1/categories/:id
+// @access  Public
+export const getSingleCategoryCtrl = expressAsyncHandler(async (req, res) => {
+	const category = await Category.findById(req.params.id);
+
+	if (!category) {
+		throw new Error('Category not found');
+	} else {
+		res.json({
+			status: 'success',
+			message: 'Category fetched successfully',
+			category,
+		});
+	}
 });
