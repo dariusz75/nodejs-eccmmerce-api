@@ -1,5 +1,6 @@
 import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/Product.js';
+import Category from '../models/Category.js';
 
 // @desc    Create new product
 // @route   POST /api/v1/product
@@ -23,6 +24,11 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 	if (productExists) {
 		throw new Error('Product already exists');
 	}
+	// Find product's category
+	const categoryFound = await Category.findOne({ name: category });
+	if (!categoryFound) {
+		throw new Error('Category not found. Please create Category first');
+	}
 	// Create new product
 	const product = await Product.create({
 		name,
@@ -37,6 +43,10 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 		brand,
 	});
 	// Push the product into category
+	categoryFound.products.push(product._id);
+	// re-save
+	categoryFound.save();
+	// Send response
 	res.json({
 		status: 'success',
 		message: 'Product created successfully',
@@ -45,7 +55,7 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Get all products
-// @route   POST /api/v1/products
+// @route   GET /api/v1/products
 // @access  Public
 export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 	let productQuery = Product.find();
@@ -145,7 +155,7 @@ export const getProductsCtrl = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Get single product
-// @route   POST /api/v1/products/:id
+// @route   GET /api/v1/products/:id
 // @access  Public
 export const getSingleProductCtrl = expressAsyncHandler(async (req, res) => {
 	const product = await Product.findById(req.params.id);
@@ -161,7 +171,7 @@ export const getSingleProductCtrl = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Update product
-// @route   POST /api/v1/products/:id/update
+// @route   PUT /api/v1/products/:id/update
 // @access  Private/Admin
 export const updateProductCtrl = expressAsyncHandler(async (req, res) => {
 	const {
@@ -189,6 +199,7 @@ export const updateProductCtrl = expressAsyncHandler(async (req, res) => {
 			images,
 			price,
 			totalQty,
+			brand,
 		},
 		{
 			new: true,
@@ -202,8 +213,8 @@ export const updateProductCtrl = expressAsyncHandler(async (req, res) => {
 	});
 });
 
-// @desc    Update product
-// @route   POST /api/v1/products/:id/update
+// @desc    Delete product
+// @route   DEL /api/v1/products/:id/update
 // @access  Private/Admin
 export const deleteProductCtrl = expressAsyncHandler(async (req, res) => {
 	// update

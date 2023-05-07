@@ -14,7 +14,7 @@ export const createCategoryCtrl = expressAsyncHandler(async (req, res) => {
 	}
 	// Create new category
 	const category = await Category.create({
-		name,
+		name: name.toLowerCase(),
 		user: req.userAuthId,
 	});
 	// Push the product into category
@@ -26,7 +26,7 @@ export const createCategoryCtrl = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Get all categories
-// @route   POST /api/v1/categories
+// @route   GET /api/v1/categories
 // @access  Public
 export const getAllCategoriesCtrl = expressAsyncHandler(async (req, res) => {
 	let categories = await Category.find();
@@ -38,8 +38,8 @@ export const getAllCategoriesCtrl = expressAsyncHandler(async (req, res) => {
 	});
 });
 
-// @desc    Get all categories
-// @route   POST /api/v1/categories/:id
+// @desc    Get single category
+// @route   GET /api/v1/categories/:id
 // @access  Public
 export const getSingleCategoryCtrl = expressAsyncHandler(async (req, res) => {
 	const category = await Category.findById(req.params.id);
@@ -53,4 +53,41 @@ export const getSingleCategoryCtrl = expressAsyncHandler(async (req, res) => {
 			category,
 		});
 	}
+});
+
+// @desc    Update category
+// @route   PUT /api/v1/categories/:id
+// @access  Private/Admin
+export const updateCategoryCtrl = expressAsyncHandler(async (req, res) => {
+	const { name } = req.body;
+	console.log('req params', req.params);
+	// update
+	const category = await Category.findByIdAndUpdate(
+		req.params.id,
+		{
+			name,
+		},
+		{
+			new: true,
+		}
+	);
+
+	res.json({
+		status: 'success',
+		message: 'Category updated successfully',
+		category,
+	});
+});
+
+// @desc    Delete category
+// @route   DEL /api/v1/categoriess/:id/delete
+// @access  Private/Admin
+export const deleteCategoryCtrl = expressAsyncHandler(async (req, res) => {
+	// update
+	const category = await Category.findByIdAndDelete(req.params.id);
+
+	res.json({
+		status: 'success',
+		message: 'Category deleted successfully',
+	});
 });
