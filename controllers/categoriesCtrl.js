@@ -80,7 +80,7 @@ export const updateCategoryCtrl = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete category
-// @route   DEL /api/v1/categoriess/:id/delete
+// @route   DEL /api/v1/categories/:id/delete
 // @access  Private/Admin
 export const deleteCategoryCtrl = expressAsyncHandler(async (req, res) => {
 	// update
