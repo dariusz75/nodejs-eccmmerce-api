@@ -2,6 +2,7 @@ import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 import Brand from '../models/Brand.js';
+import Color from '../models/Color.js';
 
 // @desc    Create new product
 // @route   POST /api/v1/product
@@ -34,6 +35,11 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 	if (!brandFound) {
 		throw new Error('Brand not found. Please create Brand first');
 	}
+	// Find product's color
+	const colorFound = await Color.findOne({ name: colors });
+	if (!colorFound) {
+		throw new Error('Color not found. Please create Color first');
+	}
 	// Create new product
 	const product = await Product.create({
 		name,
@@ -55,6 +61,10 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 	brandFound.products.push(product._id);
 	// re-save
 	brandFound.save();
+	// Push the product into color
+	colorFound.products.push(product._id);
+	// re-save
+	colorFound.save();
 	// Send response
 	res.json({
 		status: 'success',
