@@ -1,26 +1,52 @@
 import expressAsyncHandler from 'express-async-handler';
+import Product from '../models/Product.js';
 import Review from '../models/Review.js';
 
 // @desc    Create new Review
-// @route   POST /api/v1/brands
-// @access  Private/Admin
-export const createBrandCtrl = expressAsyncHandler(async (req, res) => {
-	const { name, user, products } = req.body;
+// @route   POST /api/v1/reviews
+// @access  Public
+export const createReviewCtrl = expressAsyncHandler(async (req, res) => {
+	const { user, product, message, rating } = req.body;
 
-	// Check if Brand already exists
-	const brandExists = await Brand.findOne({ name });
-	if (brandExists) {
-		throw new Error('Brand already exists');
+	// Find the product to add the review for
+	const { productId } = req.params;
+	const productFound = await Product.findById(productId);
+
+	console.log('Product is ', productFound);
+
+	// check if there is a product
+	if (!productFound) {
+		throw new Error('Product not found');
 	}
-	// Create new Brand
-	const brand = await Brand.create({
-		name: name.toLowerCase(),
+	// check if user has already reviewed this product
+
+	// Create new Review
+	const review = await Review.create({
+		message: message,
+		rating: rating,
+		product: productFound._id,
 		user: req.userAuthId,
 	});
-	// Push the Brand into category
+
+	// Push the Review into Product
+	productFound.reviews.push(review._id);
+	productFound.save();
+
 	res.json({
 		status: 'success',
-		message: 'Brand created successfully',
-		brand,
+		message: 'Review created successfully',
+	});
+});
+
+// @desc    Get all Reviews
+// @route   GET /api/v1/reviews
+// @access  Public
+export const getAllReviewsCtrl = expressAsyncHandler(async (req, res) => {
+	let reviews = await Review.find();
+
+	res.json({
+		status: 'success',
+		message: 'Reviews fetched successfully',
+		reviews,
 	});
 });
