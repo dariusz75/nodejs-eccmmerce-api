@@ -95,10 +95,23 @@ ProductSchema.virtual('averageRating').get(function () {
 	);
 	return averageRating;
 });
-// Virtuals 
-ProductSchema.virtual('totalReviews').get(function(){
-	
-})
+// Virtuals
+ProductSchema.virtual('totalReviews').get(function () {
+	const product = this;
+	return product?.reviews?.length;
+});
+// Average rating
+ProductSchema.virtual('averageRating').get(function () {
+	let ratingsTotal = 0;
+	const product = this;
+	product?.reviews?.forEach((review) => {
+		ratingsTotal += review?.rating;
+	});
+
+	const averageRating = (ratingsTotal / product.reviews.length).toFixed(1);
+	return averageRating;
+});
+
 const Product = mongoose.model('Product', ProductSchema);
 
 export default Product;
