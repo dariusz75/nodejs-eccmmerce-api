@@ -95,6 +95,10 @@ ProductSchema.virtual('averageRating').get(function () {
 	);
 	return averageRating;
 });
+// Virtuals 
+ProductSchema.virtual('totalReviews').get(function(){
+	
+})
 const Product = mongoose.model('Product', ProductSchema);
 
 export default Product;
