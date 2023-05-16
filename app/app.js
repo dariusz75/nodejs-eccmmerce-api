@@ -8,6 +8,7 @@ import categoriesRoute from '../routes/categoriesRoute.js';
 import brandsRoute from '../routes/brandsRoute.js';
 import colorsRoute from '../routes/colorsRoute.js';
 import reviewsRoute from '../routes/reviewsRoute.js';
+import ordersRoute from '../routes/ordersRoute.js';
 import {
 	globalErrorHandler,
 	notFound,
@@ -27,6 +28,7 @@ app.use('/api/v1/categories/', categoriesRoute);
 app.use('/api/v1/brands/', brandsRoute);
 app.use('/api/v1/colors/', colorsRoute);
 app.use('/api/v1/reviews/', reviewsRoute);
+app.use('/api/v1/orders/', ordersRoute);
 
 // error middleware
 app.use(notFound);
