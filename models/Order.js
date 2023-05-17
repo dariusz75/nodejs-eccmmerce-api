@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
-
-// Generate random numbers for order
+const Schema = mongoose.Schema;
+//Generate random numbers for order
 const randomTxt = Math.random().toString(36).substring(7).toLocaleUpperCase();
 const randomNumbers = Math.floor(1000 + Math.random() * 90000);
-
-const Schema = mongoose.Schema;
 const OrderSchema = new Schema(
 	{
 		user: {
@@ -24,12 +22,11 @@ const OrderSchema = new Schema(
 		},
 		orderNumber: {
 			type: String,
-			required: true,
 			default: randomTxt + randomNumbers,
 		},
+		//for stripe payment
 		paymentStatus: {
 			type: String,
-			required: true,
 			default: 'Not paid',
 		},
 		paymentMethod: {
@@ -44,6 +41,7 @@ const OrderSchema = new Schema(
 			type: String,
 			default: 'Not specified',
 		},
+		//For admin
 		status: {
 			type: String,
 			default: 'pending',
@@ -58,8 +56,7 @@ const OrderSchema = new Schema(
 	}
 );
 
-// compile to form model
-
+//compile to form model
 const Order = mongoose.model('Order', OrderSchema);
 
 export default Order;
