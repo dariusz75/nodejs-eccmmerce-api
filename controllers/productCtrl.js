@@ -31,7 +31,7 @@ export const createProductCtrl = expressAsyncHandler(async (req, res) => {
 		throw new Error('Category not found. Please create Category first');
 	}
 	// Find product's brand
-	const brandFound = await Brand.findOne({ name: brand });
+	const brandFound = await Brand.findOne({ name: brand?.toLowerCase() });
 	if (!brandFound) {
 		throw new Error('Brand not found. Please create Brand first');
 	}
