@@ -1,4 +1,4 @@
-// Product schema
+//product schema
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
@@ -72,7 +72,7 @@ const ProductSchema = new Schema(
 	}
 );
 //Virtuals
-//Qty left
+//qty left
 ProductSchema.virtual('qtyLeft').get(function () {
 	const product = this;
 	return product.totalQty - product.totalSold;
@@ -82,36 +82,19 @@ ProductSchema.virtual('totalReviews').get(function () {
 	const product = this;
 	return product?.reviews?.length;
 });
-//Average Rating
+//average Rating
 ProductSchema.virtual('averageRating').get(function () {
 	let ratingsTotal = 0;
 	const product = this;
 	product?.reviews?.forEach((review) => {
 		ratingsTotal += review?.rating;
 	});
-	//Calc average rating
+	//calc average rating
 	const averageRating = Number(ratingsTotal / product?.reviews?.length).toFixed(
 		1
 	);
 	return averageRating;
 });
-// Virtuals
-ProductSchema.virtual('totalReviews').get(function () {
-	const product = this;
-	return product?.reviews?.length;
-});
-// Average rating
-ProductSchema.virtual('averageRating').get(function () {
-	let ratingsTotal = 0;
-	const product = this;
-	product?.reviews?.forEach((review) => {
-		ratingsTotal += review?.rating;
-	});
-
-	const averageRating = (ratingsTotal / product.reviews.length).toFixed(1);
-	return averageRating;
-});
-
 const Product = mongoose.model('Product', ProductSchema);
 
 export default Product;
