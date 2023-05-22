@@ -8,70 +8,70 @@ import Color from '../models/Color.js';
 // @route   POST /api/v1/product
 // @access  Private/Admin
 export const createProductCtrl = expressAsyncHandler(async (req, res) => {
-	const {
-		name,
-		description,
-		category,
-		sizes,
-		colors,
-		images,
-		price,
-		totalQty,
-		brand,
-	} = req.body;
-
-	// Check if product already exists
-	const productExists = await Product.findOne({ name });
-	if (productExists) {
-		throw new Error('Product already exists');
-	}
-	// Find product's category
-	const categoryFound = await Category.findOne({ name: category });
-	if (!categoryFound) {
-		throw new Error('Category not found. Please create Category first');
-	}
-	// Find product's brand
-	const brandFound = await Brand.findOne({ name: brand?.toLowerCase() });
-	if (!brandFound) {
-		throw new Error('Brand not found. Please create Brand first');
-	}
-	// Find product's color
-	const colorFound = await Color.findOne({ name: colors });
-	if (!colorFound) {
-		throw new Error('Color not found. Please create Color first');
-	}
-	// Create new product
-	const product = await Product.create({
-		name,
-		description,
-		category,
-		sizes,
-		colors,
-		user: req.userAuthId,
-		images,
-		price,
-		totalQty,
-		brand,
-	});
-	// Push the product into category
-	categoryFound.products.push(product._id);
-	// re-save
-	categoryFound.save();
-	// Push the product into brand
-	brandFound.products.push(product._id);
-	// re-save
-	brandFound.save();
-	// Push the product into color
-	colorFound.products.push(product._id);
-	// re-save
-	colorFound.save();
-	// Send response
-	res.json({
-		status: 'success',
-		message: 'Product created successfully',
-		product,
-		brand,
-	});
+	console.log(req.file);
+	// const {
+	// 	name,
+	// 	description,
+	// 	category,
+	// 	sizes,
+	// 	colors,
+	// 	images,
+	// 	price,
+	// 	totalQty,
+	// 	brand,
+	// } = req.body;
+	// // Check if product already exists
+	// const productExists = await Product.findOne({ name });
+	// if (productExists) {
+	// 	throw new Error('Product already exists');
+	// }
+	// // Find product's category
+	// const categoryFound = await Category.findOne({ name: category });
+	// if (!categoryFound) {
+	// 	throw new Error('Category not found. Please create Category first');
+	// }
+	// // Find product's brand
+	// const brandFound = await Brand.findOne({ name: brand?.toLowerCase() });
+	// if (!brandFound) {
+	// 	throw new Error('Brand not found. Please create Brand first');
+	// }
+	// // Find product's color
+	// const colorFound = await Color.findOne({ name: colors });
+	// if (!colorFound) {
+	// 	throw new Error('Color not found. Please create Color first');
+	// }
+	// // Create new product
+	// const product = await Product.create({
+	// 	name,
+	// 	description,
+	// 	category,
+	// 	sizes,
+	// 	colors,
+	// 	user: req.userAuthId,
+	// 	images,
+	// 	price,
+	// 	totalQty,
+	// 	brand,
+	// });
+	// // Push the product into category
+	// categoryFound.products.push(product._id);
+	// // re-save
+	// categoryFound.save();
+	// // Push the product into brand
+	// brandFound.products.push(product._id);
+	// // re-save
+	// brandFound.save();
+	// // Push the product into color
+	// colorFound.products.push(product._id);
+	// // re-save
+	// colorFound.save();
+	// // Send response
+	// res.json({
+	// 	status: 'success',
+	// 	message: 'Product created successfully',
+	// 	product,
+	// 	brand,
+	// });
 });
 
 // @desc    Get all products
