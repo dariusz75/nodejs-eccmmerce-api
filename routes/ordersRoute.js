@@ -1,10 +1,13 @@
 import express from 'express';
 
-import { createOrderCtrl, getSalesSumCtrl } from '../controllers/orderCtrl.js';
+import {
+	createOrderCtrl,
+	getOrderStatsCtrl,
+} from '../controllers/orderCtrl.js';
 import isLoggedIn from '../middlewares/isLoggedIn.js';
 
 const ordersRoute = express.Router();
 
 ordersRoute.post('/', isLoggedIn, createOrderCtrl);
-ordersRoute.get('/sales/sum', isLoggedIn, getSalesSumCtrl);
+ordersRoute.get('/sales/stats', isLoggedIn, getOrderStatsCtrl);
 export default ordersRoute;
