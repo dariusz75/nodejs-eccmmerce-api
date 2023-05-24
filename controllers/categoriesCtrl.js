@@ -16,6 +16,7 @@ export const createCategoryCtrl = expressAsyncHandler(async (req, res) => {
 	const category = await Category.create({
 		name: name.toLowerCase(),
 		user: req.userAuthId,
+		image: req.file.path,
 	});
 	// Push the product into category
 	res.json({

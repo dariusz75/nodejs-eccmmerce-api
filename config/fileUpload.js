@@ -1,5 +1,7 @@
 import cloudinaryPackage from 'cloudinary';
 import multer from 'multer';
+import dotenv from 'dotenv';
+dotenv.config();
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 //configure cloudinary
@@ -13,7 +15,7 @@ cloudinary.config({
 
 // Create storage engine for Multer
 const storage = new CloudinaryStorage({
-	cloudinary,
+	cloudinary: cloudinary,
 	allowedFormats: ['jpg', 'png', 'jpeg'],
 	params: {
 		folder: 'Ecommerce-api',
@@ -21,6 +23,6 @@ const storage = new CloudinaryStorage({
 });
 
 // Init Multer with the storage engine
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 export default upload;

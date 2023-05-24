@@ -1,4 +1,5 @@
 import express from 'express';
+import upload from '../config/fileUpload.js';
 import {
 	createCategoryCtrl,
 	getAllCategoriesCtrl,
@@ -10,7 +11,12 @@ import isLoggedIn from '../middlewares/isLoggedIn.js';
 
 const categoriesRoute = express.Router();
 
-categoriesRoute.post('/', isLoggedIn, createCategoryCtrl);
+categoriesRoute.post(
+	'/',
+	isLoggedIn,
+	upload.single('file'),
+	createCategoryCtrl
+);
 categoriesRoute.get('/', getAllCategoriesCtrl);
 categoriesRoute.get('/:id', getSingleCategoryCtrl);
 categoriesRoute.put('/:id/update', isLoggedIn, updateCategoryCtrl);
